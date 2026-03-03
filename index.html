@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inteligência Emocional e Competências Comportamentais</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #8b5cf6; /* roxo para IE */
+      --secondary: #ec4899; /* rosa para competências */
+      --tertiary: #14b8a6; /* turquesa para resiliência */
+      --bg: #0f0a1f;
+      --card: #1e1a2f;
+      --text: #f5f3ff;
+      --muted: #cbd5e1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #0f0a1f 0%, #1f1a3a 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    header {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: radial-gradient(circle at 30% 30%, rgba(139,92,246,0.15), transparent 70%);
+    }
+
+    .main-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.4rem;
+      color: var(--muted);
+      max-width: 800px;
+      margin: 0 auto 2rem;
+    }
+
+    section {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: rgba(30, 26, 47, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.3s ease;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5);
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 30px 40px -10px rgba(139,92,246,0.2);
+    }
+
+    .card-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin: 0.25rem;
+    }
+    .pill.primary { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+    .pill.secondary { background: rgba(236,72,153,0.2); color: #f9a8d4; }
+    .pill.tertiary { background: rgba(20,184,166,0.2); color: #99f6e4; }
+
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .pillar-item {
+      background: rgba(0,0,0,0.25);
+      padding: 1.5rem 0.5rem;
+      text-align: center;
+      border-radius: 1rem;
+      border-bottom: 3px solid transparent;
+    }
+    .pillar-item:hover { border-bottom-color: var(--primary); }
+
+    .cha-diagram {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .cha-box {
+      background: rgba(0,0,0,0.3);
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid;
+    }
+    .cha-box.know { border-color: var(--primary); }
+    .cha-box.skill { border-color: var(--secondary); }
+    .cha-box.attitude { border-color: var(--tertiary); }
+
+    .scenario-card {
+      background: rgba(0,0,0,0.2);
+      border-left: 6px solid var(--tertiary);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 3rem;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px -5px var(--primary);
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 0.8rem;
+      border-radius: 0.8rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: var(--muted);
+    }
+
+    @media (max-width: 700px) {
+      .main-title { font-size: 2.2rem; }
+      .pillar-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header>
+  <h1 class="main-title">Inteligência Emocional</h1>
+  <p class="subtitle">Competências Comportamentais, Resiliência e Autoconhecimento para o Sucesso Profissional e Pessoal</p>
+  <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;">
+    <span class="pill primary">🧠 Autoconhecimento</span>
+    <span class="pill secondary">🤝 Empatia</span>
+    <span class="pill tertiary">💪 Resiliência</span>
+    <span class="pill primary">🎯 CHA</span>
+    <span class="pill secondary">⚡ Controle Emocional</span>
+  </div>
+</header>
+
+<!-- 4 PILARES DA IE -->
+<section>
+  <h2 class="section-title">🧩 4 Pilares da Inteligência Emocional</h2>
+  <div class="pillar-grid">
+    <div class="pillar-item"><i class="fas fa-eye" style="font-size:2rem; color:var(--primary);"></i><br><strong>Reconhecer</strong><br>emoções</div>
+    <div class="pillar-item"><i class="fas fa-brain" style="font-size:2rem; color:var(--secondary);"></i><br><strong>Raciocinar</strong><br>com emoções</div>
+    <div class="pillar-item"><i class="fas fa-search" style="font-size:2rem; color:var(--tertiary);"></i><br><strong>Compreender</strong><br>emoções</div>
+    <div class="pillar-item"><i class="fas fa-sliders-h" style="font-size:2rem; color:var(--primary);"></i><br><strong>Gerenciar</strong><br>emoções</div>
+  </div>
+</section>
+
+<!-- 10 ESTRATÉGIAS -->
+<section>
+  <h2 class="section-title">📋 10 Estratégias para Desenvolver IE</h2>
+  <div class="grid">
+    <div class="card"><i class="fas fa-search card-icon"></i><h3>Observe-se</h3><p>Analise seu comportamento diariamente.</p></div>
+    <div class="card"><i class="fas fa-hand-fist card-icon"></i><h3>Domine emoções</h3><p>Não deixe que elas controlem você.</p></div>
+    <div class="card"><i class="fas fa-heart-crack card-icon"></i><h3>Trabalhe o negativo</h3><p>Raiva, medo, frustração.</p></div>
+    <div class="card"><i class="fas fa-star card-icon"></i><h3>Autoconfiança</h3><p>Reconheça seu valor.</p></div>
+    <div class="card"><i class="fas fa-gauge-high card-icon"></i><h3>Lide com pressão</h3><p>Respiração, pausas.</p></div>
+    <div class="card"><i class="fas fa-comment card-icon"></i><h3>Expresse-se</h3><p>Comunicação assertiva.</p></div>
+    <div class="card"><i class="fas fa-heart card-icon"></i><h3>Empatia</h3><p>Coloque-se no lugar do outro.</p></div>
+    <div class="card"><i class="fas fa-shield-halved card-icon"></i><h3>Resiliência</h3><p>Supere adversidades.</p></div>
+    <div class="card"><i class="fas fa-pause-circle card-icon"></i><h3>Responda, não reaja</h3><p>Pause antes de agir.</p></div>
+    <div class="card"><i class="fas fa-circle-info card-icon"></i><h3>Conheça limites</h3><p>Saiba quando parar.</p></div>
+  </div>
+</section>
+
+<!-- RESILIÊNCIA -->
+<section>
+  <h2 class="section-title">💪 Resiliência</h2>
+  <div class="grid">
+    <div class="card">
+      <i class="fas fa-tree card-icon" style="color:var(--tertiary);"></i>
+      <h3>O que é?</h3>
+      <p>Capacidade de se adaptar e crescer após situações difíceis, transformando adversidades em aprendizado.</p>
+    </div>
+    <div class="card">
+      <i class="fas fa-puzzle-piece card-icon" style="color:var(--tertiary);"></i>
+      <h3>Características</h3>
+      <ul>
+        <li>✅ Adaptabilidade</li>
+        <li>✅ Mentalidade positiva</li>
+        <li>✅ Autoconfiança</li>
+        <li>✅ Rede de apoio</li>
+      </ul>
+    </div>
+    <div class="card">
+      <i class="fas fa-bolt card-icon" style="color:var(--tertiary);"></i>
+      <h3>Atitudes resilientes</h3>
+      <ul>
+        <li>👉 Adaptam-se com facilidade</li>
+        <li>👉 São otimistas</li>
+        <li>👉 Têm IE desenvolvida</li>
+        <li>👉 Autoestima elevada</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cenários práticos -->
+  <h3 style="margin-top:2rem;">🧪 Exercite a Resiliência</h3>
+  <div class="scenario-card">
+    <h4>🏢 No Trabalho</h4>
+    <p><em>Estágio com projeto complexo, prazos apertados, conflitos em equipe.</em></p>
+    <p><strong>Exercite:</strong> autoanálise, controle emocional, empatia, responder em vez de reagir, autoconfiança.</p>
+  </div>
+  <div class="scenario-card">
+    <h4>🏫 Na Escola</h4>
+    <p><em>Competição de debate, nervosismo e insegurança.</em></p>
+    <p><strong>Exercite:</strong> reconhecer emoções, lidar com pressão, autoconhecimento, resposta adequada, aprendizado contínuo.</p>
+  </div>
+</section>
+
+<!-- CHA -->
+<section>
+  <h2 class="section-title">📚 Modelo CHA</h2>
+  <div class="cha-diagram">
+    <div class="cha-box know"><span style="font-size:2rem; font-weight:bold;">C</span><br>Conhecimento<br><small>Saber</small></div>
+    <div class="cha-box skill"><span style="font-size:2rem; font-weight:bold;">H</span><br>Habilidade<br><small>Saber Fazer</small></div>
+    <div class="cha-box attitude"><span style="font-size:2rem; font-weight:bold;">A</span><br>Atitude<br><small>Querer</small></div>
+  </div>
+  <div class="grid" style="margin-top:1rem;">
+    <div class="card"><strong>C – Conhecimento:</strong> teoria, informação, saber técnico (ex: conhecer normas)</div>
+    <div class="card"><strong>H – Habilidade:</strong> prática, técnica, domínio (ex: elaborar balanço)</div>
+    <div class="card"><strong>A – Atitude:</strong> iniciativa, decisão, ação (ex: propor melhorias)</div>
+  </div>
+</section>
+
+<!-- AUTOCONHECIMENTO / 5 PERGUNTAS -->
+<section>
+  <h2 class="section-title">🔍 5 Perguntas para o Autoconhecimento</h2>
+  <div class="grid">
+    <div class="card"><i class="fas fa-question card-icon"></i><h3>Como eu ajo?</h3><p>Diante de desafios, sou cooperativo? Tenho empatia?</p></div>
+    <div class="card"><i class="fas fa-face-smile card-icon"></i><h3>O que me faz feliz?</h3><p>Atividades, hobbies, momentos de alegria.</p></div>
+    <div class="card"><i class="fas fa-users card-icon"></i><h3>O que os outros pensam?</h3><p>Como sou percebido por amigos, família, colegas?</p></div>
+    <div class="card"><i class="fas fa-chart-simple card-icon"></i><h3>Pontos fortes/fracos?</h3><p>Qualidades e áreas de melhoria.</p></div>
+    <div class="card"><i class="fas fa-globe card-icon"></i><h3>Que marca quero deixar?</h3><p>Qual impacto quero ter no mundo?</p></div>
+  </div>
+</section>
+
+<!-- CHECKLIST INTERATIVO -->
+<section>
+  <h2 class="section-title">✅ Checklist IE</h2>
+  <div id="checklistContainer"></div>
+  <button class="btn" id="calcScore" style="margin-top:2rem;">📊 Ver Pontuação</button>
+  <div id="scoreResult" style="margin-top:2rem; display:none; background:rgba(0,0,0,0.4); padding:1.5rem; border-radius:1.5rem;"></div>
+</section>
+
+<footer>
+  <p><strong>Tema 01 – Inteligência Emocional e Competências Comportamentais</strong><br>Autoconhecimento, Resiliência e CHA</p>
+  <p style="margin-top:1.5rem;">"A inteligência emocional não é um luxo, é uma necessidade."</p>
+</footer>
+
+<script>
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const particles = [];
+  for (let i = 0; i < 50; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 3 + 1,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      color: `hsl(${Math.random() * 60 + 240}, 70%, 70%)`
+    });
+  }
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Checklist
+  const items = [
+    'Reconheço minhas emoções no momento em que surgem',
+    'Sei nomear o que estou sentindo (raiva, tristeza, alegria)',
+    'Consigo me acalmar quando estou nervoso',
+    'Mantenho o foco mesmo sob pressão',
+    'Entendo como os outros estão se sentindo',
+    'Tenho facilidade para me relacionar com pessoas diferentes',
+    'Resolvo conflitos de forma equilibrada',
+    'Aceito feedbacks sem me sentir atacado',
+    'Aprendo com meus erros em vez de me culpar',
+    'Tenho clareza sobre meus pontos fortes e fracos'
+  ];
+  let html = '';
+  items.forEach((txt, i) => {
+    html += `<div class="checklist-item">
+      <input type="checkbox" id="chk${i}"> <label for="chk${i}">${txt}</label>
+    </div>`;
+  });
+  document.getElementById('checklistContainer').innerHTML = html;
+
+  document.getElementById('calcScore').addEventListener('click', () => {
+    let total = 0;
+    for (let i = 0; i < items.length; i++) {
+      if (document.getElementById(`chk${i}`).checked) total++;
+    }
+    const percent = (total / items.length) * 100;
+    let msg = '';
+    if (percent >= 80) msg = '🎉 Excelente! Sua inteligência emocional é um diferencial.';
+    else if (percent >= 50) msg = '📊 Bom caminho. Continue desenvolvendo.';
+    else msg = '🌱 Comece agora! Use as 10 estratégias para evoluir.';
+    document.getElementById('scoreResult').style.display = 'block';
+    document.getElementById('scoreResult').innerHTML = `<h4>Pontuação: ${total}/${items.length} (${percent.toFixed(1)}%)</h4><p>${msg}</p>`;
+  });
+</script>
+</body>
+</html>
